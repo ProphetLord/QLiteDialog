@@ -1,0 +1,11 @@
+.git/
+.idea/
+cmake-*/
+out/
+[Rr]elease*/
+[Dd]ebug*/
+RelWithDebInfo/
+app.rc
+install.nsi
+dev-tools/
+desktop.ini
