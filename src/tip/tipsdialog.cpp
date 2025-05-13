@@ -1,14 +1,12 @@
 #include "tipsdialog.h"
 
 #include <QVBoxLayout>
+#include <qevent.h>
 #include <corecrt_startup.h>
 
-LITE_NAMESPACE_BEGIN
+QLITEDIALOG_NAMESPACE_BEGIN
 TipsDialog::TipsDialog(QWidget *parent)
-    : BaseDialog(parent) {
-    windowBackground(true);
-    windowRelease(false);
-    // setWindowFlags(Qt::ToolTip);
+    : BaseWidget(parent) {
     setAttribute(Qt::WA_ShowWithoutActivating);
     setAttribute(Qt::WA_TransparentForMouseEvents, false);
 
@@ -86,7 +84,10 @@ bool TipsDialog::eventFilter(QObject *obj, QEvent *event) {
             return true;
         }
     }
-    return QDialog::eventFilter(obj, event);
+    return BaseWidget::eventFilter(obj, event);
+}
+void TipsDialog::setupProperty(BasePropertyBuilder &builder) {
+    builder.setReleaseOnClose(false).setFrameless(true).setTaskBar(true).setTopHint(true).setTranslucentBackground(true);
 }
 void TipsDialog::showAsTooltip() {
     if (!m_target)
@@ -128,4 +129,4 @@ QPoint TipsDialog::computeTipPosition() const {
     QPoint tipPos = bottomLeftGlobal + QPoint(0, 5);
     return tipPos;
 }
-LITE_NAMESPACE_END
+QLITEDIALOG_NAMESPACE_END

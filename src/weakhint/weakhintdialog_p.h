@@ -1,12 +1,12 @@
 #pragma once
 
 #include "weakhintdialog.h"
-#include "../basedialog.h"
+#include "../basewidget.h"
 #include <qpen.h>
 
-LITE_NAMESPACE_BEGIN
+QLITEDIALOG_NAMESPACE_BEGIN
 class WeakHintDialogPrivate;
-class WeakHintWidget : public BaseDialog<QWidget>
+class WeakHintWidget : public BaseWidget
 {
     Q_OBJECT
 public:
@@ -22,11 +22,10 @@ public:
 
 protected:
     void paintEvent(QPaintEvent *event) override;
-
     void showEvent(QShowEvent *event) override;
-
     void mousePressEvent(QMouseEvent *event) override;
     void mouseReleaseEvent(QMouseEvent *event) override;
+    void setupProperty(BasePropertyBuilder &builder) override;
 
 private:
     QTimer* timer = nullptr;
@@ -78,4 +77,4 @@ private:
     QHash<WeakHintDialog::WeakHintPosition, QList<WeakHintWidget*>> weakHintWidgets;
     QHash<WeakHintDialog::WeakHintPosition, WeakHintDialog::WeakHintDisplayType> weakHintDisplayType;
 };
-LITE_NAMESPACE_END
+QLITEDIALOG_NAMESPACE_END

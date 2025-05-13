@@ -3,9 +3,9 @@
 #include <qobject.h>
 #include <qimage.h>
 
-#include "bean/datadef.h"
+#include "global.h"
 
-LITE_NAMESPACE_BEGIN
+QLITEDIALOG_NAMESPACE_BEGIN
 class WeakHintWidget;
 class WeakHintDialogPrivate;
 class WeakHintDialog : public QObject {
@@ -79,4 +79,4 @@ private:
     QScopedPointer<WeakHintDialogPrivate> d_ptr;
 };
 
-LITE_NAMESPACE_END
+QLITEDIALOG_NAMESPACE_END

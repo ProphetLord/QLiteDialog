@@ -16,15 +16,19 @@ App::App(QWidget *parent)
     font.setPixelSize(30);
     weakDlg->setWeakHintWidgetFont(font);
 
-    weakDlg->setWeakHintDisplayType(WeakHintDialog::ParentCenter, WeakHintDialog::Arrange);
-
     TipsManager::setTipsLabelStyleSheet("background:#2B2D30;border: 1px solid gray;border-radius:4px;color:red;font-size:16px;");
     TipsManager::setTipsLabelMargins(QMargins(4, 4, 4, 4));
-    TipsManager::addTipsWidget(this, "这是一个测试提示弹窗的界面");
+    // TipsManager::addTipsWidget(this, "这是一个测试提示弹窗的界面");
+
+    InnerDialog::setMainWidget(this);
+    InnerDialog::setInnerWidgetScale(InnerDialog::SizeScale, 0.5);
 }
 
 void App::on_btn_Screen_Center_clicked() {
-    weakDlg->addWeakHintLabel(QString("Center"), WeakHintDialog::ParentCenter);
+    auto normalDlg = new NormalDialog;
+    normalDlg->show();
+    return;
+    weakDlg->addWeakHintLabel(QString("Center"), WeakHintDialog::ScreenCenter, QImage(), WeakHintDialog::ManualClose);
 }
 void App::on_btn_Screen_Left_clicked() {
     weakDlg->addWeakHintLabel(QString("Left"), WeakHintDialog::ParentLeft);

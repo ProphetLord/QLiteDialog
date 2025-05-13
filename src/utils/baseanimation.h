@@ -1,11 +1,15 @@
 #pragma once
 
+#include "../global.h"
 #include <qpropertyanimation.h>
-#include "bean/datadef.h"
 
-LITE_NAMESPACE_BEGIN
+QLITEDIALOG_NAMESPACE_BEGIN
+
+struct AnimationProperty;
+class BaseAnimationPrivate;
 class BaseAnimation : public QObject
 {
+    Q_DECLARE_PRIVATE(BaseAnimation)
 public:
     static QPropertyAnimation* createAnimation(QWidget* widget, const QByteArray& property, const QVariantAnimation::KeyValues& value, int msec = 250, QEasingCurve::Type easingType = QEasingCurve::Linear);
 
@@ -29,23 +33,14 @@ public:
 
     explicit BaseAnimation(QWidget* w, bool enterAnimation, QObject* parent = nullptr);
 
+    void setupAnimationProperty(const AnimationProperty& animation_property);
+
     void createBaseAnimation();
 
     bool isClose() const;
 
-public:
-    QWidget* widget = nullptr;
-    QByteArray property;
-    QVariantAnimation::KeyValues values;
-    int msec = 250;
-    QEasingCurve::Type type = QEasingCurve::OutBack;
-    Qt::AnchorPoint anchor = Qt::AnchorBottom;
-
-    AnimationType animationType = None;
-
 private:
-    bool isClosing = false;
-    bool isEnterAnimation = true;
+    QScopedPointer<BaseAnimationPrivate> d_ptr;
 };
 
-LITE_NAMESPACE_END
+QLITEDIALOG_NAMESPACE_END

@@ -1,9 +1,9 @@
 #pragma once
 
+#include "../global.h"
 #include <qwidget.h>
-#include "bean/datadef.h"
 
-LITE_NAMESPACE_BEGIN
+QLITEDIALOG_NAMESPACE_BEGIN
 enum MouseRegion {
     Window_Left_Border,            ///< 窗口左边框
     Window_Right_Border,           ///< 窗口右边框
@@ -39,7 +39,7 @@ public:
 
     void setMoveWidget(QWidget* widget);
 
-    void setWindowResizeable(bool resiable);
+    void setWindowResizeable(bool resizeable);
 private:
     bool leftButtonPressed = false; ///< 窗口拖动状态标志
     QPoint start;   ///< 窗口拖动的起始位置
@@ -48,4 +48,4 @@ private:
     QWidget* moveWidget = nullptr;
     bool windowResizeable = true;
 };
-LITE_NAMESPACE_END
+QLITEDIALOG_NAMESPACE_END

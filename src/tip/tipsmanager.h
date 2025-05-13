@@ -1,7 +1,7 @@
 #pragma once
 
 #include "tipsdialog.h"
-LITE_NAMESPACE_BEGIN
+QLITEDIALOG_NAMESPACE_BEGIN
 class TipsManager : public QObject {
     Q_OBJECT
 public:
@@ -26,4 +26,4 @@ private:
     QString labelStyleSheet;
     QMargins labelMargins;
 };
-LITE_NAMESPACE_END
+QLITEDIALOG_NAMESPACE_END

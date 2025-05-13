@@ -15,14 +15,14 @@ if(OPEN_PARTY_DEBUG_MESSAGE)
 endif ()
 
 add_library(${PROJECT_NAME}
-    basedialog.h
-    baseanimation.h
-    baseanimation.cpp
+    utils/baseanimation.h
+    utils/baseanimation.cpp
 
-    windowframelesshelper.h
-    windowframelesshelper.cpp
+    utils/windowframelesshelper.h
+    utils/windowframelesshelper.cpp
 
     inner/innerdialog.h
+    inner/innerdialog_p.h
     inner/innerdialog.cpp
 
     normal/normaldialog.h
@@ -35,6 +35,8 @@ add_library(${PROJECT_NAME}
     tip/tipsdialog.h
     tip/tipsmanager.cpp
     tip/tipsmanager.h
+    basewidget.cpp
+    basewidget.h
 )
 
 target_link_libraries(${PROJECT_NAME}

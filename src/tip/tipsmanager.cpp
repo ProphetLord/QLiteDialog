@@ -1,6 +1,6 @@
 #include "tipsmanager.h"
 #include <qhash.h>
-LITE_NAMESPACE_BEGIN
+QLITEDIALOG_NAMESPACE_BEGIN
 TipsManager &TipsManager::getInstance() {
     static TipsManager instance;
     return instance;
@@ -57,4 +57,4 @@ TipsDialog *TipsManager::getTipsDialog(QObject *object) {
 TipsManager::TipsManager() {
 
 }
-LITE_NAMESPACE_END
+QLITEDIALOG_NAMESPACE_END

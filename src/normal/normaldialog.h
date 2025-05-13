@@ -1,11 +1,16 @@
 #pragma once
 
-#include "../basedialog.h"
+#include "../basewidget.h"
 #include <qdialog.h>
-LITE_NAMESPACE_BEGIN
-class NormalDialog : public BaseDialog<QDialog> {
+QLITEDIALOG_NAMESPACE_BEGIN
+class NormalDialog : public BaseWidget {
     Q_OBJECT
 public:
-    explicit NormalDialog(QWidget* parent = nullptr);
+    explicit NormalDialog(QWidget *parent = nullptr);
+
+protected:
+    void setupProperty(BasePropertyBuilder &builder) override;
+
+    void paintEvent(QPaintEvent *event) override;
 };
-LITE_NAMESPACE_END
+QLITEDIALOG_NAMESPACE_END

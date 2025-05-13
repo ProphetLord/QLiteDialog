@@ -1,12 +1,12 @@
 #pragma once
 
-#include "../basedialog.h"
+#include "../basewidget.h"
 #include <qdialog.h>
 #include <qlabel.h>
 #include <qpointer.h>
 
-LITE_NAMESPACE_BEGIN
-class TipsDialog : public BaseDialog<QDialog> {
+QLITEDIALOG_NAMESPACE_BEGIN
+class TipsDialog : public BaseWidget {
     Q_OBJECT
 public:
     explicit TipsDialog(QWidget* parent = nullptr);
@@ -30,6 +30,7 @@ public:
 
 protected:
     bool eventFilter(QObject *obj, QEvent *event) override;
+    void setupProperty(BasePropertyBuilder &builder) override;
 
 private:
     void showAsTooltip();
@@ -46,4 +47,4 @@ private:
     bool isCustomPoint = false;
     QPoint customPoint;
 };
-LITE_NAMESPACE_END
+QLITEDIALOG_NAMESPACE_END

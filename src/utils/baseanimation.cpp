@@ -1,8 +1,54 @@
 #include "baseanimation.h"
+#include "baseanimation_p.h"
 
 #include <qwidget.h>
-LITE_NAMESPACE_BEGIN
-QPropertyAnimation* BaseAnimation::createAnimation(QWidget *widget, const QByteArray &property, const QVariantAnimation::KeyValues &values, int msec, QEasingCurve::Type easingType) {
+QLITEDIALOG_NAMESPACE_BEGIN
+BaseAnimationPrivate::BaseAnimationPrivate(BaseAnimation *q)
+    : q_ptr(q) {
+}
+
+void BaseAnimationPrivate::createBaseAnimation() {
+    QPropertyAnimation *animation = nullptr;
+    switch (animation_property.animationType) {
+        case BaseAnimation::None:
+            break;
+        case BaseAnimation::Custom: {
+            animation = BaseAnimation::createAnimation(widget, animation_property.animationProperty, animation_property.values, animation_property.msec, animation_property.type);
+        } break;
+        case BaseAnimation::Slide: {
+            if (isEnterAnimation) {
+                animation = BaseAnimation::createSlidePopupAnimationEnter(widget, animation_property.anchor, animation_property.animationProperty.isEmpty() ? "geometry" : animation_property.animationProperty, animation_property.msec, animation_property.type);
+            } else {
+                animation = BaseAnimation::createSlidePopupAnimationClose(widget, animation_property.anchor, animation_property.animationProperty.isEmpty() ? "geometry" : animation_property.animationProperty, animation_property.msec, animation_property.type);
+            }
+        } break;
+        case BaseAnimation::Zoom: {
+            if (isEnterAnimation) {
+                animation = BaseAnimation::createPopupZoomAnimationEnter(widget, animation_property.animationProperty.isEmpty() ? "geometry" : animation_property.animationProperty, animation_property.msec, animation_property.type);
+            } else {
+                animation = BaseAnimation::createPopupZoomAnimationClose(widget, animation_property.animationProperty.isEmpty() ? "geometry" : animation_property.animationProperty, animation_property.msec, animation_property.type);
+            }
+        } break;
+        case BaseAnimation::Opacity: {
+            if (isEnterAnimation) {
+                animation = BaseAnimation::createOpacityAnimationEnter(widget, animation_property.animationProperty.isEmpty() ? "windowOpacity" : animation_property.animationProperty, animation_property.msec, animation_property.type);
+            } else {
+                animation = BaseAnimation::createOpacityAnimationClose(widget, animation_property.animationProperty.isEmpty() ? "windowOpacity" : animation_property.animationProperty, animation_property.msec, animation_property.type);
+            }
+        } break;
+    }
+
+    if (animation) {
+        connect(animation, &QPropertyAnimation::finished, this, [&] {
+            if (widget && !isEnterAnimation) {
+                isClosing = true;
+                widget->close();
+            }
+        });
+    }
+}
+
+QPropertyAnimation * BaseAnimation::createAnimation(QWidget *widget, const QByteArray &property, const QVariantAnimation::KeyValues &values, int msec, QEasingCurve::Type easingType) {
     auto animation = new QPropertyAnimation(widget, property);
     animation->setDuration(msec);
     animation->setKeyValues(values);
@@ -92,51 +138,18 @@ QPropertyAnimation* BaseAnimation::createOpacityAnimationClose(QWidget *widget, 
 }
 
 BaseAnimation::BaseAnimation(QWidget *w, bool enterAnimation, QObject *parent)
-    : QObject(parent), widget(w), isEnterAnimation(enterAnimation)
-{
+    : QObject(parent), d_ptr(new BaseAnimationPrivate(this)) {
+    d_ptr->widget = w;
+    d_ptr->isEnterAnimation = enterAnimation;
 }
-
+void BaseAnimation::setupAnimationProperty(const AnimationProperty &animation_property) {
+    d_ptr->animation_property = animation_property;
+}
 void BaseAnimation::createBaseAnimation() {
-    QPropertyAnimation *animation = nullptr;
-    switch (animationType) {
-        case None:
-            break;
-        case Custom: {
-            animation = createAnimation(widget, property, values, msec, type);
-        } break;
-        case Slide: {
-            if (isEnterAnimation) {
-                animation = createSlidePopupAnimationEnter(widget, anchor, property.isEmpty() ? "geometry" : property, msec, type);
-            } else {
-                animation = createSlidePopupAnimationClose(widget, anchor, property.isEmpty() ? "geometry" : property, msec, type);
-            }
-        } break;
-        case Zoom: {
-            if (isEnterAnimation) {
-                animation = createPopupZoomAnimationEnter(widget, property.isEmpty() ? "geometry" : property, msec, type);
-            } else {
-                animation = createPopupZoomAnimationClose(widget, property.isEmpty() ? "geometry" : property, msec, type);
-            }
-        } break;
-        case Opacity: {
-            if (isEnterAnimation) {
-                animation = createOpacityAnimationEnter(widget, property.isEmpty() ? "windowOpacity" : property, msec, type);
-            } else {
-                animation = createOpacityAnimationClose(widget, property.isEmpty() ? "windowOpacity" : property, msec, type);
-            }
-        } break;
-    }
+    d_ptr->createBaseAnimation();
+}
 
-    if (animation) {
-        connect(animation, &QPropertyAnimation::finished, this, [&] {
-            if (widget && !isEnterAnimation) {
-                isClosing = true;
-                widget->close();
-            }
-        });
-    }
-}
 bool BaseAnimation::isClose() const {
-    return animationType == None ? true : isClosing;
+    return d_ptr->animation_property.animationType == None ? true : d_ptr->isClosing;
 }
-LITE_NAMESPACE_END
+QLITEDIALOG_NAMESPACE_END

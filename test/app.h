@@ -8,7 +8,7 @@
 #include "weakhint/weakhintdialog.h"
 #include "tip/tipsdialog.h"
 
-LITE_USE_NAMESPACE
+QLITEDIALOG_USE_NAMESPACE
 
 class App : public QWidget {
     Q_OBJECT

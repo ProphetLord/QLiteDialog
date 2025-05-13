@@ -1,7 +1,7 @@
 #include "windowframelesshelper.h"
 
 #include <qevent.h>
-LITE_NAMESPACE_BEGIN
+QLITEDIALOG_NAMESPACE_BEGIN
 WindowFramelessHelper::WindowFramelessHelper(QWidget* parent)
     : QWidget(parent)
 {
@@ -189,4 +189,4 @@ void WindowFramelessHelper::setMoveWidget(QWidget *widget) {
 void WindowFramelessHelper::setWindowResizeable(bool resizeable) {
     windowResizeable = resizeable;
 }
-LITE_NAMESPACE_END
+QLITEDIALOG_NAMESPACE_END

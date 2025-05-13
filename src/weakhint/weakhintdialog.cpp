@@ -11,14 +11,14 @@
 
 #include <qdebug.h>
 
-LITE_NAMESPACE_BEGIN
+QLITEDIALOG_NAMESPACE_BEGIN
 WeakHintWidget::WeakHintWidget(const QString &text, WeakHintDialog::WeakHintCloseMode mode,
     WeakHintDialogPrivate* weak, QWidget *parent)
-    : BaseDialog(parent), context(text), widget_image(QImage())
+    : BaseWidget(parent), context(text), widget_image(QImage())
     , closeMode(mode)
     , curWeakHint(weak)
 {
-    windowBackground(true);
+    setupBaseProperty();
     hide();
     timer = new QTimer(this);
     timer->setSingleShot(true);
@@ -87,19 +87,23 @@ void WeakHintWidget::showEvent(QShowEvent *event) {
             timer->start();
         }
     }
-    BaseDialog::showEvent(event);
+    BaseWidget::showEvent(event);
 }
 void WeakHintWidget::mousePressEvent(QMouseEvent *event) {
     if (closeMode == WeakHintDialog::ManualClose) {
         isWidgetPressed = true;
     }
-    BaseDialog<QWidget>::mousePressEvent(event);
+    BaseWidget::mousePressEvent(event);
 }
 void WeakHintWidget::mouseReleaseEvent(QMouseEvent *event) {
     if (isWidgetPressed) {
         close();
     }
-    BaseDialog<QWidget>::mouseReleaseEvent(event);
+    BaseWidget::mouseReleaseEvent(event);
+}
+void WeakHintWidget::setupProperty(BasePropertyBuilder &builder) {
+    builder.setTranslucentBackground(true);
+    BaseWidget::setupProperty(builder);
 }
 
 WeakHintDialogPrivate::WeakHintDialogPrivate(WeakHintDialog *q)
@@ -367,4 +371,4 @@ void WeakHintDialog::setWeakHintWidgetPen(const QPen &pen) const {
 void WeakHintDialog::setScreenIndex(int index) {
     d_ptr->screenIndex = index;
 }
-LITE_NAMESPACE_END
+QLITEDIALOG_NAMESPACE_END
